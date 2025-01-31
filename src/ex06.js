@@ -1,12 +1,9 @@
-// container
-
+// Interaction
 import './style.css';
 import {
   Application,
   Assets,
-  Sprite,
-  Graphics,
-  Container,
+  Sprite
 } from 'pixi.js';
 
 export default async function main() {
@@ -17,31 +14,26 @@ export default async function main() {
     background: 'royalblue',
     resizeTo: window,
     resolution: window.devicePixelRatio || 1,
-    autoDensity: true,
+    autoDensity: true
   });
 
   app.canvas.id = 'app-canvas';
   document.body.appendChild(app.canvas);
   
-  const container = new Container();
-  app.stage.addChild(container);
-  container.x = 200;
-  container.y = 200;
-
   const texture = await Assets.load('https://pixijs.com/assets/bunny.png');
   const bunny = new Sprite(texture);
-  container.addChild(bunny);
+  app.stage.addChild(bunny);
+  bunny.anchor.set(0.5);
+  bunny.x = app.screen.width / 2;
+  bunny.y = app.screen.height / 2;
 
-  bunny.x = 100;
-  bunny.y = 100;
+  bunny.eventMode = 'static';
+  bunny.cursor = 'pointer';
 
-  const rect = new Graphics();
-  rect.rect(0, 0, 50, 50);
-  rect.fill();
-  container.addChild(rect);
+  let n = 1;
 
-  app.ticker.add((delta) => {
-    container.rotation += delta.deltaTime * 0.01;
+  bunny.on('pointertap', () => {
+    bunny.scale.set(++n);
   });
 };
 
